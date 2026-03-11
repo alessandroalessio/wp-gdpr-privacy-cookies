@@ -4,7 +4,7 @@
 Plugin Name: Eazy Policy &amp; Cookies Pages GDR Compliant
 Plugin URI: http://www.eazythemes.com
 Description: Create page for Cookies e Privacy for GDPR
-Version: 2.0
+Version: 2.2
 Author: Alessandro Alessio
 Author URI: http://www.a2area.it
 */
