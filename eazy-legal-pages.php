@@ -49,6 +49,8 @@ function eazy_legal_register_options_settings() {
     register_setting( 'eazy-legal-settings-group', 'eazy_company_cookie_maps');
     register_setting( 'eazy-legal-settings-group', 'eazy_company_cookie_social');
     register_setting( 'eazy-legal-settings-group', 'eazy_company_cookie_list');
+
+    register_setting( 'eazy-legal-settings-group', 'eazy_gtm_code');
 }
 
 /**
@@ -198,6 +200,13 @@ function eazy_legal_display_opt_page(){
                     <td>
                         <textarea name="eazy_company_cookie_list" cols="30" rows="10"><?php echo (empty(get_option('eazy_company_cookie_list'))) ? $eazy_cookie_list_default_string : esc_attr( get_option('eazy_company_cookie_list') ); ?></textarea>
                     </td>
+                </tr>
+                <tr>
+                    <td colspan="2"><hr></td>
+                </tr>
+                <tr>
+                    <td><label for="eazy_gtm_code"><?php _e('Google Tag Manager Code', 'eazylegal') ?> :</label></td>
+                    <td><input type="text" value="<?php echo esc_attr( get_option('eazy_gtm_code') ); ?>" name="eazy_gtm_code" placeholder="<?php _e('GTM-XXXXXXX', 'eazylegal') ?>"></td>
                 </tr>
                 <tr>
                     <td colspan="2">&nbsp;</td>
@@ -372,4 +381,32 @@ function eazy_legal_ouput_cookies($atts) {
 
     return $output;
 }
+
+/**
+ * Add GTM code in header
+ */
+add_action( 'wp_head', 'eazy_add_gtm_code_head' );
+function eazy_add_gtm_code_head() {
+    $eazy_gtm_code = get_option( 'eazy_gtm_code' );
+    if ( !empty($eazy_gtm_code) ) :
+        echo '<!-- Google Tag Manager -->';
+        echo '<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({"gtm.start":new Date().getTime(),event:"gtm.js"});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!="dataLayer"?"&l="+l:"";j.async=true;j.src="https://www.googletagmanager.com/gtm.js?id="+i+dl;f.parentNode.insertBefore(j,f);})(window,document,"script","dataLayer","'.esc_attr( $eazy_gtm_code ).'");</script>';
+        echo '<!-- End Google Tag Manager -->';
+    endif;
+}
+
+/**
+ * Add GTM code in body
+ */
+add_action( 'wp_body_open', 'eazy_add_gtm_code_body' );
+function eazy_add_gtm_code_body() {
+    $eazy_gtm_code = get_option( 'eazy_gtm_code' );
+    if ( !empty($eazy_gtm_code) ) :
+        echo '<!-- Google Tag Manager (noscript) -->';
+        echo '<noscript><iframe src="https://www.googletagmanager.com/ns.html?id='.esc_attr( $eazy_gtm_code ).'" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>';
+        echo '<!-- End Google Tag Manager (noscript) -->';
+    endif;
+}
+
+// Test only
 ?>
